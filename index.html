@@ -1041,7 +1041,8 @@
 	</div>
 	<div class="achievement"></div>
 
-	<div class="special-hint">试试长按屏幕或鼠标...</div>
+	<!-- 移除长按提示 -->
+	<!-- <div class="special-hint">试试长按屏幕或鼠标...</div> -->
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/three.js"></script>
@@ -2578,19 +2579,18 @@
 			button.addEventListener('click', playButtonSound);
 		});
 
-		// 长按相关变量
+		// 移除长按相关变量和事件监听
+		/*
 		let pressTimer = null;
 		let isPressed = false;
-		const LONG_PRESS_DURATION = 500; // 长按触发时间（毫秒）
+		const LONG_PRESS_DURATION = 500;
 
-		// 鼠标长按处理
 		document.addEventListener('mousedown', startPress);
 		document.addEventListener('mouseup', endPress);
 		document.addEventListener('mouseleave', endPress);
 
-		// 触摸屏长按处理
 		document.addEventListener('touchstart', (e) => {
-			e.preventDefault(); // 防止触摸事件触发其他行为
+			e.preventDefault();
 			startPress(e);
 		});
 		document.addEventListener('touchend', (e) => {
@@ -2621,11 +2621,13 @@
 				stopSpecialEffect();
 			}
 		}
+		*/
 
-		// 修改特效提示文本
-		document.querySelector('.special-hint').textContent = '试试长按屏幕或鼠标...';
+		// 移除特效提示文本
+		// document.querySelector('.special-hint').textContent = '试试长按屏幕或鼠标...';
 
-		// 优化特效函数
+		// 移除特效函数
+		/*
 		function startSpecialEffect() {
 			document.querySelector('.special-hint').style.opacity = '0';
 			
@@ -2633,7 +2635,6 @@
 				bgm.playbackRate = 1.5;
 				showSpecialText('音乐加速! 🎵', null);
 				
-				// 创建视觉特效
 				createVisualEffect();
 			}
 		}
@@ -2645,11 +2646,9 @@
 			}
 		}
 
-		// 添加视觉特效
 		function createVisualEffect() {
 			if (!isPressed) return;
 			
-			// 创建音符和星星
 			const effects = ['♪', '♫', '✨', '💫', '🌟'];
 			const effect = document.createElement('div');
 			effect.className = 'special-effect';
@@ -2658,7 +2657,6 @@
 			effect.style.top = Math.random() * window.innerHeight + 'px';
 			document.body.appendChild(effect);
 			
-			// 添加动画
 			effect.animate([
 				{ transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
 				{ transform: `translate(${Math.random() * 200 - 100}px, ${-Math.random() * 200}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
@@ -2667,24 +2665,11 @@
 				easing: 'ease-out'
 			}).onfinish = () => effect.remove();
 			
-			// 循环创建特效
 			if (isPressed) {
 				requestAnimationFrame(createVisualEffect);
 			}
 		}
-
-		// 添加特效样式
-		const style = document.createElement('style');
-		style.textContent = `
-			.special-effect {
-				position: fixed;
-				font-size: 24px;
-				pointer-events: none;
-				z-index: 1000;
-				text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
-			}
-		`;
-		document.head.appendChild(style);
+		*/
 	</script>
 
 </body>
