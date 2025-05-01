@@ -961,6 +961,14 @@
 		.secret-button:hover {
 			opacity: 1;
 		}
+
+		.special-effect {
+			position: fixed;
+			font-size: 24px;
+			pointer-events: none;
+			z-index: 1000;
+			text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+		}
 	</style>
 	<link rel="stylesheet" href="css/animate.min.css">
 </head>
@@ -1033,7 +1041,7 @@
 	</div>
 	<div class="achievement"></div>
 
-	<div class="special-hint">试试按住空格键...</div>
+	<div class="special-hint">试试长按屏幕或鼠标...</div>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/three.js"></script>
@@ -2569,6 +2577,114 @@
 		document.querySelectorAll('.menu button').forEach(button => {
 			button.addEventListener('click', playButtonSound);
 		});
+
+		// 长按相关变量
+		let pressTimer = null;
+		let isPressed = false;
+		const LONG_PRESS_DURATION = 500; // 长按触发时间（毫秒）
+
+		// 鼠标长按处理
+		document.addEventListener('mousedown', startPress);
+		document.addEventListener('mouseup', endPress);
+		document.addEventListener('mouseleave', endPress);
+
+		// 触摸屏长按处理
+		document.addEventListener('touchstart', (e) => {
+			e.preventDefault(); // 防止触摸事件触发其他行为
+			startPress(e);
+		});
+		document.addEventListener('touchend', (e) => {
+			e.preventDefault();
+			endPress();
+		});
+		document.addEventListener('touchcancel', (e) => {
+			e.preventDefault();
+			endPress();
+		});
+
+		function startPress(e) {
+			if (pressTimer === null) {
+				isPressed = true;
+				pressTimer = setTimeout(() => {
+					if (isPressed) {
+						startSpecialEffect();
+					}
+				}, LONG_PRESS_DURATION);
+			}
+		}
+
+		function endPress() {
+			isPressed = false;
+			if (pressTimer !== null) {
+				clearTimeout(pressTimer);
+				pressTimer = null;
+				stopSpecialEffect();
+			}
+		}
+
+		// 修改特效提示文本
+		document.querySelector('.special-hint').textContent = '试试长按屏幕或鼠标...';
+
+		// 优化特效函数
+		function startSpecialEffect() {
+			document.querySelector('.special-hint').style.opacity = '0';
+			
+			if (bgm && bgm.playbackRate !== 1.5) {
+				bgm.playbackRate = 1.5;
+				showSpecialText('音乐加速! 🎵', null);
+				
+				// 创建视觉特效
+				createVisualEffect();
+			}
+		}
+
+		function stopSpecialEffect() {
+			if (bgm && bgm.playbackRate !== 1) {
+				bgm.playbackRate = 1;
+				showSpecialText('音乐恢复~ 🎵', null);
+			}
+		}
+
+		// 添加视觉特效
+		function createVisualEffect() {
+			if (!isPressed) return;
+			
+			// 创建音符和星星
+			const effects = ['♪', '♫', '✨', '💫', '🌟'];
+			const effect = document.createElement('div');
+			effect.className = 'special-effect';
+			effect.innerHTML = effects[Math.floor(Math.random() * effects.length)];
+			effect.style.left = Math.random() * window.innerWidth + 'px';
+			effect.style.top = Math.random() * window.innerHeight + 'px';
+			document.body.appendChild(effect);
+			
+			// 添加动画
+			effect.animate([
+				{ transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+				{ transform: `translate(${Math.random() * 200 - 100}px, ${-Math.random() * 200}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+			], {
+				duration: 1000,
+				easing: 'ease-out'
+			}).onfinish = () => effect.remove();
+			
+			// 循环创建特效
+			if (isPressed) {
+				requestAnimationFrame(createVisualEffect);
+			}
+		}
+
+		// 添加特效样式
+		const style = document.createElement('style');
+		style.textContent = `
+			.special-effect {
+				position: fixed;
+				font-size: 24px;
+				pointer-events: none;
+				z-index: 1000;
+				text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+			}
+		`;
+		document.head.appendChild(style);
 	</script>
 
 </body>

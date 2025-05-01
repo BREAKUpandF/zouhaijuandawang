@@ -28,6 +28,14 @@ let poems = {
     ]
 };
 
+// 音乐控制相关变量
+let isLongPressing = false;
+let longPressTimer;
+let originalPlaybackRate = 1.0;
+const maxPlaybackRate = 2.0;
+const accelerationRate = 0.1;
+let particleSystem;
+
 // 初始化场景
 function init() {
     scene = new THREE.Scene();
@@ -58,6 +66,8 @@ function init() {
     // 事件监听
     window.addEventListener('resize', onWindowResize, false);
     bindEvents();
+    initParticleSystem();
+    bindLongPressEvents();
 }
 
 // 加载资源
@@ -164,6 +174,7 @@ function animate() {
     requestAnimationFrame(animate);
     TWEEN.update();
     controls.update();
+    updateParticles();
     renderer.render(scene, camera);
 }
 
@@ -192,6 +203,152 @@ function transform(positions) {
             }, 2000)
             .easing(TWEEN.Easing.Exponential.InOut)
             .start();
+    }
+}
+
+// 初始化粒子系统
+function initParticleSystem() {
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const colors = [];
+    const particleCount = 100;
+
+    for (let i = 0; i < particleCount; i++) {
+        vertices.push(
+            Math.random() * 2000 - 1000,
+            Math.random() * 2000 - 1000,
+            Math.random() * 2000 - 1000
+        );
+        colors.push(
+            Math.random(),
+            Math.random(),
+            Math.random()
+        );
+    }
+
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+    const material = new THREE.PointsMaterial({
+        size: 10,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8
+    });
+
+    particleSystem = new THREE.Points(geometry, material);
+    scene.add(particleSystem);
+}
+
+// 更新粒子系统
+function updateParticles() {
+    if (particleSystem && isLongPressing) {
+        const positions = particleSystem.geometry.attributes.position.array;
+        for (let i = 0; i < positions.length; i += 3) {
+            positions[i + 1] += Math.random() * 5;
+            if (positions[i + 1] > 1000) positions[i + 1] = -1000;
+        }
+        particleSystem.geometry.attributes.position.needsUpdate = true;
+        particleSystem.rotation.y += 0.002;
+    }
+}
+
+// 绑定长按事件
+function bindLongPressEvents() {
+    const container = document.getElementById('container');
+    
+    // 鼠标事件
+    container.addEventListener('mousedown', startLongPress);
+    container.addEventListener('mouseup', endLongPress);
+    container.addEventListener('mouseleave', endLongPress);
+    
+    // 触摸事件
+    container.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        startLongPress();
+    });
+    container.addEventListener('touchend', endLongPress);
+    container.addEventListener('touchcancel', endLongPress);
+    
+    // 空格键事件
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && !isLongPressing) {
+            e.preventDefault();
+            startLongPress();
+        }
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            endLongPress();
+        }
+    });
+}
+
+// 开始长按
+function startLongPress() {
+    if (!isLongPressing) {
+        isLongPressing = true;
+        originalPlaybackRate = musicPlayer.playbackRate;
+        accelerateMusic();
+        showVisualFeedback();
+    }
+}
+
+// 结束长按
+function endLongPress() {
+    if (isLongPressing) {
+        isLongPressing = false;
+        clearTimeout(longPressTimer);
+        musicPlayer.playbackRate = originalPlaybackRate;
+        hideVisualFeedback();
+    }
+}
+
+// 加速音乐
+function accelerateMusic() {
+    if (isLongPressing && musicPlayer.playbackRate < maxPlaybackRate) {
+        musicPlayer.playbackRate = Math.min(
+            musicPlayer.playbackRate + accelerationRate,
+            maxPlaybackRate
+        );
+        longPressTimer = setTimeout(accelerateMusic, 100);
+    }
+}
+
+// 显示视觉反馈
+function showVisualFeedback() {
+    const container = document.getElementById('container');
+    const feedback = document.createElement('div');
+    feedback.className = 'visual-feedback';
+    container.appendChild(feedback);
+    
+    // 添加音符和星星动画
+    for (let i = 0; i < 10; i++) {
+        createParticle(feedback);
+    }
+}
+
+// 创建粒子动画
+function createParticle(parent) {
+    const particle = document.createElement('span');
+    const symbols = ['♪', '♫', '✦', '✧', '✶', '✷', '✵'];
+    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+    parent.appendChild(particle);
+    
+    particle.addEventListener('animationend', () => {
+        particle.remove();
+    });
+}
+
+// 隐藏视觉反馈
+function hideVisualFeedback() {
+    const feedback = document.querySelector('.visual-feedback');
+    if (feedback) {
+        feedback.remove();
     }
 }
 
