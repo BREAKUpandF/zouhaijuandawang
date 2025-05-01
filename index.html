@@ -17,6 +17,8 @@
 		body {
 			background: linear-gradient(45deg, #000000, #1a1a2e);
 			font-family: "Microsoft YaHei", sans-serif;
+			animation: gradientBG 15s ease infinite;
+			background-size: 400% 400%;
 		}
 
 		#container {
@@ -122,6 +124,26 @@
 			z-index: 100;
 			font-family: "楷体", "Microsoft YaHei", sans-serif;
 			letter-spacing: 3px;
+			text-shadow: 0 0 5px #ff69b4,
+						  0 0 10px #ff69b4,
+						  0 0 20px #ff69b4,
+						  0 0 40px #ff1493;
+			animation: neon 1.5s ease-in-out infinite alternate;
+		}
+
+		@keyframes neon {
+			from {
+				text-shadow: 0 0 5px #fff,
+							 0 0 10px #fff,
+							 0 0 20px #ff69b4,
+							 0 0 40px #ff69b4;
+			}
+			to {
+				text-shadow: 0 0 10px #fff,
+							 0 0 20px #fff,
+							 0 0 40px #ff69b4,
+							 0 0 80px #ff69b4;
+			}
 		}
 
 		#music-control {
@@ -154,19 +176,102 @@
 		}
 
 		.menu button {
-			padding: 10px 20px;
+			position: relative;
+			padding: 12px 24px;
 			border: none;
-			border-radius: 20px;
-			background: rgba(255, 105, 180, 0.8);
+			border-radius: 30px;
+			background: linear-gradient(45deg, #ff69b4, #ff8da1);
 			color: white;
 			cursor: pointer;
 			font-size: 16px;
+			font-weight: bold;
 			transition: all 0.3s ease;
+			box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			gap: 8px;
 		}
 
 		.menu button:hover {
-			background: rgba(255, 105, 180, 1);
-			transform: scale(1.05);
+			transform: translateY(-3px) scale(1.05);
+			box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+		}
+
+		.menu button:active {
+			transform: translateY(1px);
+		}
+
+		/* 添加按钮光晕效果 */
+		.menu button::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.menu button:hover::before {
+			opacity: 1;
+		}
+
+		/* 添加按钮装饰元素 */
+		.menu button::after {
+			content: '✨';
+			position: absolute;
+			right: -20px;
+			top: -10px;
+			font-size: 20px;
+			opacity: 0;
+			transform: rotate(0deg);
+			transition: all 0.3s ease;
+		}
+
+		.menu button:hover::after {
+			opacity: 1;
+			transform: rotate(360deg);
+		}
+
+		/* 添加按钮文字动画 */
+		.menu button span {
+			position: relative;
+			z-index: 1;
+			transition: transform 0.3s ease;
+		}
+
+		.menu button:hover span {
+			transform: scale(1.1);
+		}
+
+		/* 添加按钮图标动画 */
+		.menu button .emoji {
+			display: inline-block;
+			transition: transform 0.3s ease;
+		}
+
+		.menu button:hover .emoji {
+			transform: scale(1.2) rotate(10deg);
+		}
+
+		/* 添加按钮点击波纹效果 */
+		.menu button .ripple {
+			position: absolute;
+			background: rgba(255, 255, 255, 0.3);
+			border-radius: 50%;
+			transform: scale(0);
+			animation: ripple 0.6s linear;
+			pointer-events: none;
+		}
+
+		@keyframes ripple {
+			to {
+				transform: scale(4);
+				opacity: 0;
+			}
 		}
 
 		/* 移动端适配样式 */
@@ -174,20 +279,20 @@
 			#love-message {
 				font-size: 24px !important;
 				padding: 0 10px;
-			}
+		}
 
-			.show_info {
+		.show_info {
 				width: 80% !important;
 				max-width: 300px;
 				padding: 15px !important;
-			}
+		}
 
-			.show_info img {
+		.show_info img {
 				width: 200px !important;
 				height: 200px !important;
-			}
+		}
 
-			.show_info .intro {
+		.show_info .intro {
 				font-size: 18px !important;
 			}
 
@@ -218,6 +323,644 @@
 				height: 80px !important;
 			}
 		}
+
+		/* 添加可爱元素的样式 */
+		.floating-hearts {
+			position: fixed;
+			pointer-events: none;
+			z-index: 99;
+		}
+
+		.heart {
+			position: absolute;
+			font-size: 20px;
+			color: #ff69b4;
+			animation: float-up 4s ease-in-out;
+		}
+
+		@keyframes float-up {
+			0% { transform: translateY(100vh) scale(0); opacity: 0; }
+			10% { opacity: 1; }
+			90% { opacity: 1; }
+			100% { transform: translateY(-100px) scale(1); opacity: 0; }
+		}
+
+		/* 点击特效 */
+		.click-effect {
+			position: absolute;
+			pointer-events: none;
+			animation: click-animation 0.5s ease-out;
+			color: #ff69b4;
+			font-size: 24px;
+		}
+
+		@keyframes click-animation {
+			0% {
+				transform: scale(0.3);
+				opacity: 1;
+			}
+			100% {
+				transform: scale(1.5);
+				opacity: 0;
+			}
+		}
+
+		/* 按钮悬浮效果 */
+		.menu button {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.menu button::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 0;
+			height: 0;
+			background: rgba(255, 255, 255, 0.2);
+			border-radius: 50%;
+			transform: translate(-50%, -50%);
+			transition: width 0.3s, height 0.3s;
+		}
+
+		.menu button:hover::after {
+			width: 200%;
+			height: 200%;
+		}
+
+		/* 可爱的加载动画 */
+		.loading-hearts {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 1000;
+			display: flex;
+			gap: 8px;
+		}
+
+		.loading-heart {
+			font-size: 24px;
+			color: #ff69b4;
+			animation: pulse 0.8s infinite;
+		}
+
+		.loading-heart:nth-child(2) {
+			animation-delay: 0.2s;
+		}
+
+		.loading-heart:nth-child(3) {
+			animation-delay: 0.4s;
+		}
+
+		@keyframes pulse {
+			0%, 100% {
+				transform: scale(1);
+			}
+			50% {
+				transform: scale(1.3);
+			}
+		}
+
+		/* 添加动态背景样式 */
+		.background-animation {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: -1;
+			overflow: hidden;
+		}
+
+		.star {
+			position: absolute;
+			background: #fff;
+			border-radius: 50%;
+			animation: twinkle var(--duration) infinite;
+			opacity: 0;
+		}
+
+		@keyframes twinkle {
+			0%, 100% {
+				opacity: 0;
+				transform: scale(0.5);
+			}
+			50% {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		.shooting-star {
+			position: absolute;
+			width: 2px;
+			height: 2px;
+			background: linear-gradient(45deg, #ff69b4, transparent);
+			border-radius: 50%;
+			animation: shoot 3s linear infinite;
+			opacity: 0;
+		}
+
+		@keyframes shoot {
+			0% {
+				transform: translate(0, 0) rotate(45deg) scale(0);
+				opacity: 0;
+			}
+			10% {
+				opacity: 1;
+			}
+			20% {
+				transform: translate(200px, 200px) rotate(45deg) scale(1);
+				opacity: 0;
+			}
+			100% {
+				transform: translate(400px, 400px) rotate(45deg) scale(1);
+				opacity: 0;
+			}
+		}
+
+		/* 背景渐变动画 */
+		@keyframes gradientBG {
+			0% {
+				background-position: 0% 50%;
+			}
+			50% {
+				background-position: 100% 50%;
+			}
+			100% {
+				background-position: 0% 50%;
+			}
+		}
+
+		/* 装饰性气泡 */
+		.bubble {
+			position: absolute;
+			border-radius: 50%;
+			background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), rgba(255, 105, 180, 0.1));
+			box-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
+			backdrop-filter: blur(2px);
+			animation: float var(--duration) ease-in-out infinite;
+			opacity: 0.3;
+		}
+
+		@keyframes float {
+			0%, 100% {
+				transform: translateY(0) translateX(0);
+			}
+			50% {
+				transform: translateY(-20px) translateX(10px);
+			}
+		}
+
+		/* 樱花飘落效果 */
+		.sakura {
+			position: absolute;
+			background: #ffd1dc;
+			border-radius: 50%;
+			animation: fall linear infinite;
+			opacity: 0.5;
+		}
+
+		@keyframes fall {
+			0% {
+				transform: translate(0, -10vh) rotate(0deg);
+			}
+			100% {
+				transform: translate(20vw, 100vh) rotate(360deg);
+			}
+		}
+
+		/* 彩虹光晕效果 */
+		.rainbow-halo {
+			position: fixed;
+			width: 200vmax;
+			height: 200vmax;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: conic-gradient(
+				from 0deg,
+				rgba(255, 0, 0, 0.1),
+				rgba(255, 165, 0, 0.1),
+				rgba(255, 255, 0, 0.1),
+				rgba(0, 255, 0, 0.1),
+				rgba(0, 255, 255, 0.1),
+				rgba(0, 0, 255, 0.1),
+				rgba(255, 0, 255, 0.1),
+				rgba(255, 0, 0, 0.1)
+			);
+			border-radius: 50%;
+			animation: rotate 60s linear infinite;
+			z-index: -2;
+			opacity: 0.3;
+		}
+
+		@keyframes rotate {
+			100% {
+				transform: translate(-50%, -50%) rotate(360deg);
+			}
+		}
+
+		/* 飘动的丝带效果 */
+		.ribbon-decoration {
+			position: fixed;
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		.ribbon {
+			position: absolute;
+			width: 3px;
+			background: linear-gradient(to bottom, transparent, #ff69b4, transparent);
+			animation: wave var(--duration) ease-in-out infinite;
+			transform-origin: 50% 0;
+		}
+
+		@keyframes wave {
+			0%, 100% {
+				transform: rotate(-10deg);
+			}
+			50% {
+				transform: rotate(10deg);
+			}
+		}
+
+		/* 光点效果 */
+		.light-spot {
+			position: absolute;
+			width: 4px;
+			height: 4px;
+			background: #fff;
+			border-radius: 50%;
+			filter: blur(1px);
+			animation: sparkle var(--duration) ease-in-out infinite;
+		}
+
+		@keyframes sparkle {
+			0%, 100% {
+				opacity: 0.2;
+				transform: scale(1);
+			}
+			50% {
+				opacity: 1;
+				transform: scale(1.5);
+			}
+		}
+
+		/* 按钮悬浮特效增强 */
+		.menu button {
+			position: relative;
+			overflow: hidden;
+			transition: all 0.3s ease;
+			border: 2px solid transparent;
+			background: rgba(255, 105, 180, 0.3);
+			backdrop-filter: blur(5px);
+		}
+
+		.menu button:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+			border-color: #ff69b4;
+		}
+
+		.menu button::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+			transform: scale(0);
+			transition: transform 0.3s ease;
+		}
+
+		.menu button:hover::before {
+			transform: scale(1);
+		}
+
+		/* 添加漂浮的云朵效果 */
+		.cloud {
+			position: fixed;
+			background: rgba(255, 255, 255, 0.2);
+			border-radius: 50%;
+			animation: floatCloud 20s linear infinite;
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		@keyframes floatCloud {
+			0% {
+				transform: translateX(-100px) translateY(0);
+			}
+			50% {
+				transform: translateX(calc(100vw + 100px)) translateY(-50px);
+			}
+			100% {
+				transform: translateX(-100px) translateY(0);
+			}
+		}
+
+		/* 添加飘落的花瓣效果 */
+		.petal {
+			position: fixed;
+			background: linear-gradient(45deg, #ff69b4, #ff8da1);
+			border-radius: 50% 0;
+			transform: rotate(45deg);
+			animation: fallPetal 8s linear infinite;
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		@keyframes fallPetal {
+			0% {
+				transform: translateY(-100px) rotate(0deg);
+				opacity: 1;
+			}
+			100% {
+				transform: translateY(calc(100vh + 100px)) rotate(360deg);
+				opacity: 0;
+			}
+		}
+
+		/* 添加闪烁的星星效果 */
+		.twinkle-star {
+			position: fixed;
+			background: white;
+			border-radius: 50%;
+			animation: twinkle 2s ease-in-out infinite;
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		@keyframes twinkle {
+			0%, 100% {
+				opacity: 0.2;
+				transform: scale(1);
+			}
+			50% {
+				opacity: 1;
+				transform: scale(1.2);
+			}
+		}
+
+		/* 添加可爱的装饰边框 */
+		.decorative-border {
+			position: fixed;
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		.border-corner {
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			border: 2px solid rgba(255, 105, 180, 0.3);
+		}
+
+		.border-corner::before,
+		.border-corner::after {
+			content: '';
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			border: 2px solid rgba(255, 105, 180, 0.3);
+			border-radius: 50%;
+		}
+
+		/* 添加可爱的提示气泡 */
+		.tooltip {
+			position: fixed;
+			background: rgba(255, 105, 180, 0.9);
+			color: white;
+			padding: 8px 12px;
+			border-radius: 15px;
+			font-size: 14px;
+			opacity: 0;
+			transform: translateY(10px);
+			transition: all 0.3s ease;
+			pointer-events: none;
+			z-index: 1000;
+		}
+
+		.tooltip::after {
+			content: '';
+			position: absolute;
+			bottom: -8px;
+			left: 50%;
+			transform: translateX(-50%);
+			border-width: 8px 8px 0;
+			border-style: solid;
+			border-color: rgba(255, 105, 180, 0.9) transparent transparent;
+		}
+
+		/* 添加收集爱心的游戏元素 */
+		.collectible-heart {
+			position: fixed;
+			font-size: 24px;
+			cursor: pointer;
+			animation: float 3s ease-in-out infinite;
+			z-index: 10;
+			transition: all 0.3s ease;
+		}
+
+		.collectible-heart:hover {
+			transform: scale(1.2);
+		}
+
+		/* 添加分数显示 */
+		.score-display {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			background: rgba(255, 105, 180, 0.8);
+			padding: 10px 20px;
+			border-radius: 20px;
+			color: white;
+			font-size: 16px;
+			z-index: 1000;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+		}
+
+		/* 添加成就徽章 */
+		.achievement {
+			position: fixed;
+			bottom: 20px;
+			left: 20px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			z-index: 1000;
+		}
+
+		.achievement-badge {
+			background: rgba(255, 255, 255, 0.9);
+			padding: 8px 15px;
+			border-radius: 15px;
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			transform: translateX(-120%);
+			transition: transform 0.3s ease;
+		}
+
+		.achievement-badge.show {
+			transform: translateX(0);
+		}
+
+		/* 添加特效动画 */
+		@keyframes float {
+			0%, 100% {
+				transform: translateY(0);
+			}
+			50% {
+				transform: translateY(-20px);
+			}
+		}
+
+		/* 添加点击特效 */
+		.collect-effect {
+			position: fixed;
+			pointer-events: none;
+			animation: collectEffect 0.5s ease-out forwards;
+			z-index: 1000;
+		}
+
+		@keyframes collectEffect {
+			0% {
+				transform: scale(1);
+				opacity: 1;
+			}
+			100% {
+				transform: scale(2);
+				opacity: 0;
+			}
+		}
+
+		/* 添加连击特效样式 */
+		.spark {
+			position: absolute;
+			width: 2px;
+			height: 20px;
+			background: linear-gradient(to top, transparent, #ff69b4);
+			transform-origin: bottom;
+			animation: sparkle 1s ease-out forwards;
+		}
+
+		.combo-text {
+			position: absolute;
+			top: -30px;
+			left: 50%;
+			transform: translateX(-50%);
+			color: #ff69b4;
+			font-weight: bold;
+			animation: floatUp 1s ease-out forwards;
+		}
+
+		@keyframes sparkle {
+			0% {
+				transform: rotate(var(--rotation)) translateY(0) scale(1);
+				opacity: 1;
+			}
+			100% {
+				transform: rotate(var(--rotation)) translateY(-50px) scale(0);
+				opacity: 0;
+			}
+		}
+
+		@keyframes floatUp {
+			0% {
+				transform: translate(-50%, 0);
+				opacity: 1;
+			}
+			100% {
+				transform: translate(-50%, -20px);
+				opacity: 0;
+			}
+		}
+
+		/* 添加隐藏彩蛋效果 */
+		.secret-cat {
+			position: fixed;
+			font-size: 30px;
+			cursor: pointer;
+			opacity: 0;
+			transition: all 0.3s ease;
+			z-index: 1000;
+			filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
+		}
+
+		.secret-cat.show {
+			opacity: 1;
+		}
+
+		.secret-cat:hover {
+			transform: scale(1.2);
+		}
+
+		/* 添加音符效果 */
+		.music-note {
+			position: fixed;
+			font-size: 24px;
+			pointer-events: none;
+			animation: floatNote 2s ease-out forwards;
+			z-index: 100;
+		}
+
+		@keyframes floatNote {
+			0% {
+				transform: translate(0, 0) rotate(0deg);
+				opacity: 1;
+			}
+			100% {
+				transform: translate(var(--moveX), -100px) rotate(360deg);
+				opacity: 0;
+			}
+		}
+
+		/* 添加特殊效果提示 */
+		.special-hint {
+			position: fixed;
+			bottom: 80px;
+			left: 50%;
+			transform: translateX(-50%);
+			background: rgba(255, 105, 180, 0.9);
+			color: white;
+			padding: 10px 20px;
+			border-radius: 20px;
+			font-size: 14px;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+			z-index: 1000;
+		}
+
+		/* 添加隐藏按钮效果 */
+		.secret-button {
+			position: fixed;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.secret-button.show {
+			opacity: 0.3;
+		}
+
+		.secret-button:hover {
+			opacity: 1;
+		}
 	</style>
 	<link rel="stylesheet" href="css/animate.min.css">
 </head>
@@ -232,10 +975,22 @@
 		<!-- 音乐将通过JavaScript动态设置 -->
 	</audio>
 	<div class="menu">
-		<button class="heart-btn">❤️ 心形</button>
-		<button class="starry-btn">🌟 星空</button>
-		<button class="ribbon-btn">🎀 丝带</button>
-		<button class="starlight-btn">✨ 星光</button>
+		<button class="heart-btn">
+			<span class="emoji">🐱</span>
+			<span>心形</span>
+		</button>
+		<button class="starry-btn">
+			<span class="emoji">🐕</span>
+			<span>星空</span>
+		</button>
+		<button class="ribbon-btn">
+			<span class="emoji">😺</span>
+			<span>丝带</span>
+		</button>
+		<button class="starlight-btn">
+			<span class="emoji">🐺</span>
+			<span>星光</span>
+		</button>
 	</div>
 
 	<div class="show_info animated" style="display:none;">
@@ -244,6 +999,41 @@
 		</div>
 		<div class="intro">心有灵犀一点通</div>
 	</div>
+
+	<!-- 添加加载动画 -->
+	<div class="loading-hearts">
+		<span class="loading-heart">❤️</span>
+		<span class="loading-heart">❤️</span>
+		<span class="loading-heart">❤️</span>
+	</div>
+
+	<!-- 添加漂浮爱心容器 -->
+	<div class="floating-hearts"></div>
+
+	<!-- 添加背景动画容器 -->
+	<div class="background-animation"></div>
+
+	<!-- 添加彩虹光晕 -->
+	<div class="rainbow-halo"></div>
+	
+	<!-- 添加丝带装饰 -->
+	<div class="ribbon-decoration"></div>
+
+	<div class="decorative-border">
+		<div class="border-corner" style="top: 0; left: 0;"></div>
+		<div class="border-corner" style="top: 0; right: 0;"></div>
+		<div class="border-corner" style="bottom: 0; left: 0;"></div>
+		<div class="border-corner" style="bottom: 0; right: 0;"></div>
+	</div>
+	<div class="tooltip"></div>
+	<div class="score-display">
+		<span>💖</span>
+		<span id="score">0</span>
+		<span>分</span>
+	</div>
+	<div class="achievement"></div>
+
+	<div class="special-hint">试试按住空格键...</div>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/three.js"></script>
@@ -702,6 +1492,21 @@
 			initializeFiles();
 			initLayoutButtons();
 			initTouchEvents(); // 初始化触摸事件
+			createStarryBackground();
+			createRibbons();
+			createClouds();
+			createPetals();
+			createStars();
+			addButtonTooltips();
+			createSecretButtons();
+			
+			// 显示提示
+			setTimeout(() => {
+				document.querySelector('.special-hint').style.opacity = '1';
+				setTimeout(() => {
+					document.querySelector('.special-hint').style.opacity = '0';
+				}, 3000);
+			}, 5000);
 		});
 
 		// 添加页面可见性变化监听
@@ -850,26 +1655,26 @@
 
 		function generateContent() {
 			if (imageList.length === 0) return;
-			
-			// 生成虚拟数据
-			for (var i = 0; i < 200; i++) {
+
+		// 生成虚拟数据
+		for (var i = 0; i < 200; i++) {
 				var x = imageList[Math.floor(Math.random() * imageList.length)];
 				var imgname = 'img/' + x;
-				personArray.push({
-					image: imgname
-				});
-			}
+			personArray.push({
+				image: imgname
+			});
+		}
 
-			var table = new Array;
-			for (var i = 0; i < personArray.length; i++) {
-				table[i] = new Object();
-				if (i < personArray.length) {
-					table[i] = personArray[i];
-					table[i].src = personArray[i].thumb_image;
-				}
-				table[i].p_x = i % 20 + 1;
-				table[i].p_y = Math.floor(i / 20) + 1;
+		var table = new Array;
+		for (var i = 0; i < personArray.length; i++) {
+			table[i] = new Object();
+			if (i < personArray.length) {
+				table[i] = personArray[i];
+				table[i].src = personArray[i].thumb_image;
 			}
+			table[i].p_x = i % 20 + 1;
+			table[i].p_y = Math.floor(i / 20) + 1;
+		}
 
 			init();
 			animate();
@@ -1119,6 +1924,651 @@
 				touchStartY = 0;
 			}, false);
 		}
+
+		// 添加点击特效
+		document.addEventListener('click', function(e) {
+			const clickEffect = document.createElement('div');
+			clickEffect.className = 'click-effect';
+			clickEffect.innerHTML = '❤️';
+			clickEffect.style.left = (e.pageX - 12) + 'px';
+			clickEffect.style.top = (e.pageY - 12) + 'px';
+			document.body.appendChild(clickEffect);
+			
+			setTimeout(() => {
+				document.body.removeChild(clickEffect);
+			}, 500);
+		});
+
+		// 生成漂浮爱心
+		function createFloatingHeart() {
+			const heart = document.createElement('div');
+			heart.className = 'heart';
+			heart.innerHTML = ['❤️', '💖', '💕', '💗', '💓'][Math.floor(Math.random() * 5)];
+			heart.style.left = Math.random() * window.innerWidth + 'px';
+			document.querySelector('.floating-hearts').appendChild(heart);
+			setTimeout(() => heart.remove(), 4000);
+		}
+
+		// 定期生成漂浮爱心
+		setInterval(createFloatingHeart, 2000);
+
+		// 页面加载完成后隐藏加载动画
+		window.addEventListener('load', function() {
+			setTimeout(() => {
+				document.querySelector('.loading-hearts').style.display = 'none';
+			}, 1000);
+		});
+
+		// 优化图片展示动画
+		function showImageWithEffect() {
+			const showInfo = document.querySelector('.show_info');
+			const img = showInfo.querySelector('img');
+			const intro = showInfo.querySelector('.intro');
+			
+			// 添加缩放效果
+			img.style.transform = 'scale(0.8)';
+			img.style.transition = 'transform 0.5s ease-out';
+			
+			setTimeout(() => {
+				img.style.transform = 'scale(1)';
+			}, 100);
+
+			// 为文字添加打字机效果
+			const text = intro.textContent;
+			intro.textContent = '';
+			let index = 0;
+			
+			function typeWriter() {
+				if (index < text.length) {
+					intro.textContent += text.charAt(index);
+					index++;
+					setTimeout(typeWriter, 50);
+				}
+			}
+			
+			typeWriter();
+		}
+
+		// 修改原有的展示逻辑，加入新效果
+		var s = setInterval(function () {
+			if (imageList.length === 0) return;
+			
+			$('.show_info').show();
+			showImageWithEffect();
+			
+			var rand_in = parseInt(Math.random() * _in.length, 10);
+			var rand_out = parseInt(Math.random() * _out.length, 10);
+			if (CurPersonNum >= personArray.length) {
+				CurPersonNum = 0;
+			}
+			++CurPersonNum;
+			setTimeout(function () {
+				$('.show_info').addClass(_out[rand_out]);
+				setTimeout(function () {
+					$('.show_info').removeClass(_out[rand_out]);
+					$('.show_info').hide();
+				}, 1000);
+			}, 2500);
+		}, 6000);
+
+		// 添加鼠标移动特效
+		let mouseTrail = [];
+		const TRAIL_LENGTH = 10;
+
+		document.addEventListener('mousemove', function(e) {
+			mouseTrail.push({x: e.pageX, y: e.pageY});
+			
+			if (mouseTrail.length > TRAIL_LENGTH) {
+				mouseTrail.shift();
+			}
+			
+			const hearts = document.querySelectorAll('.mouse-trail');
+			hearts.forEach(heart => heart.remove());
+			
+			mouseTrail.forEach((pos, index) => {
+				const trail = document.createElement('div');
+				trail.className = 'heart mouse-trail';
+				trail.style.left = pos.x + 'px';
+				trail.style.top = pos.y + 'px';
+				trail.style.opacity = index / TRAIL_LENGTH;
+				trail.style.transform = `scale(${index / TRAIL_LENGTH})`;
+				trail.innerHTML = '💖';
+				document.body.appendChild(trail);
+				
+				setTimeout(() => trail.remove(), 100);
+			});
+		});
+
+		// 创建星星背景
+		function createStarryBackground() {
+			const container = document.querySelector('.background-animation');
+			const starCount = 100;
+			
+			// 创建闪烁的星星
+			for (let i = 0; i < starCount; i++) {
+				const star = document.createElement('div');
+				star.className = 'star';
+				star.style.left = Math.random() * 100 + 'vw';
+				star.style.top = Math.random() * 100 + 'vh';
+				star.style.width = Math.random() * 3 + 'px';
+				star.style.height = star.style.width;
+				star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+				container.appendChild(star);
+			}
+
+			// 创建装饰性气泡
+			for (let i = 0; i < 20; i++) {
+				const bubble = document.createElement('div');
+				bubble.className = 'bubble';
+				bubble.style.left = Math.random() * 100 + 'vw';
+				bubble.style.top = Math.random() * 100 + 'vh';
+				bubble.style.width = Math.random() * 50 + 20 + 'px';
+				bubble.style.height = bubble.style.width;
+				bubble.style.setProperty('--duration', (Math.random() * 5 + 3) + 's');
+				container.appendChild(bubble);
+			}
+
+			// 创建樱花效果
+			setInterval(() => {
+				const sakura = document.createElement('div');
+				sakura.className = 'sakura';
+				sakura.style.left = Math.random() * 100 + 'vw';
+				sakura.style.width = Math.random() * 4 + 2 + 'px';
+				sakura.style.height = sakura.style.width;
+				sakura.style.animation = `fall ${Math.random() * 5 + 3}s linear infinite`;
+				container.appendChild(sakura);
+
+				// 移除樱花元素
+				setTimeout(() => sakura.remove(), 8000);
+			}, 300);
+
+			// 创建流星效果
+			setInterval(() => {
+				const shootingStar = document.createElement('div');
+				shootingStar.className = 'shooting-star';
+				shootingStar.style.left = Math.random() * 100 + 'vw';
+				shootingStar.style.top = Math.random() * 50 + 'vh';
+				container.appendChild(shootingStar);
+
+				// 移除流星元素
+				setTimeout(() => shootingStar.remove(), 3000);
+			}, 2000);
+
+			// 添加星座连线效果
+			const constellationPoints = [];
+			for (let i = 0; i < 5; i++) {
+				const points = [];
+				const pointCount = Math.floor(Math.random() * 3) + 3;
+				
+				for (let j = 0; j < pointCount; j++) {
+					points.push({
+						x: Math.random() * 100,
+						y: Math.random() * 100
+					});
+				}
+				constellationPoints.push(points);
+			}
+			
+			constellationPoints.forEach(points => {
+				const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+				svg.style.position = 'absolute';
+				svg.style.width = '100%';
+				svg.style.height = '100%';
+				svg.style.top = '0';
+				svg.style.left = '0';
+				svg.style.opacity = '0.3';
+				
+				for (let i = 0; i < points.length - 1; i++) {
+					const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+					line.setAttribute('x1', points[i].x + '%');
+					line.setAttribute('y1', points[i].y + '%');
+					line.setAttribute('x2', points[i + 1].x + '%');
+					line.setAttribute('y2', points[i + 1].y + '%');
+					line.setAttribute('stroke', '#ff69b4');
+					line.setAttribute('stroke-width', '1');
+					line.setAttribute('stroke-opacity', '0.3');
+					svg.appendChild(line);
+				}
+				
+				document.querySelector('.background-animation').appendChild(svg);
+			});
+		}
+
+		// 优化背景动画性能
+		function optimizeAnimation() {
+			const background = document.querySelector('.background-animation');
+			if (document.hidden) {
+				background.style.animationPlayState = 'paused';
+			} else {
+				background.style.animationPlayState = 'running';
+			}
+		}
+
+		// 监听页面可见性变化
+		document.addEventListener('visibilitychange', optimizeAnimation);
+
+		// 创建丝带装饰
+		function createRibbons() {
+			const container = document.querySelector('.ribbon-decoration');
+			const ribbonCount = 8;
+			
+			for (let i = 0; i < ribbonCount; i++) {
+				const ribbon = document.createElement('div');
+				ribbon.className = 'ribbon';
+				ribbon.style.left = (i * 15) + 'vw';
+				ribbon.style.height = Math.random() * 200 + 100 + 'px';
+				ribbon.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+				
+				// 添加光点装饰
+				const spotsCount = Math.floor(Math.random() * 3) + 2;
+				for (let j = 0; j < spotsCount; j++) {
+					const spot = document.createElement('div');
+					spot.className = 'light-spot';
+					spot.style.top = (j * 30) + '%';
+					spot.style.setProperty('--duration', (Math.random() * 2 + 1) + 's');
+					ribbon.appendChild(spot);
+				}
+				
+				container.appendChild(ribbon);
+			}
+		}
+
+		// 添加按钮点击波纹效果
+		document.querySelectorAll('.menu button').forEach(button => {
+			button.addEventListener('click', function(e) {
+				const ripple = document.createElement('span');
+				ripple.className = 'ripple';
+				this.appendChild(ripple);
+
+				const rect = this.getBoundingClientRect();
+				const x = e.clientX - rect.left;
+				const y = e.clientY - rect.top;
+
+				ripple.style.left = x + 'px';
+				ripple.style.top = y + 'px';
+
+				setTimeout(() => ripple.remove(), 600);
+			});
+		});
+
+		// 创建云朵
+		function createClouds() {
+			for (let i = 0; i < 3; i++) {
+				const cloud = document.createElement('div');
+				cloud.className = 'cloud';
+				cloud.style.width = Math.random() * 100 + 50 + 'px';
+				cloud.style.height = cloud.style.width;
+				cloud.style.top = Math.random() * 50 + '%';
+				cloud.style.animationDelay = i * 5 + 's';
+				document.body.appendChild(cloud);
+			}
+		}
+
+		// 创建花瓣
+		function createPetals() {
+			setInterval(() => {
+				const petal = document.createElement('div');
+				petal.className = 'petal';
+				petal.style.width = Math.random() * 20 + 10 + 'px';
+				petal.style.height = petal.style.width;
+				petal.style.left = Math.random() * 100 + 'vw';
+				petal.style.animationDuration = Math.random() * 5 + 5 + 's';
+				document.body.appendChild(petal);
+
+				setTimeout(() => petal.remove(), 8000);
+			}, 500);
+		}
+
+		// 创建星星
+		function createStars() {
+			for (let i = 0; i < 20; i++) {
+				const star = document.createElement('div');
+				star.className = 'twinkle-star';
+				star.style.width = Math.random() * 3 + 1 + 'px';
+				star.style.height = star.style.width;
+				star.style.left = Math.random() * 100 + 'vw';
+				star.style.top = Math.random() * 100 + 'vh';
+				star.style.animationDelay = Math.random() * 2 + 's';
+				document.body.appendChild(star);
+			}
+		}
+
+		// 添加按钮提示
+		function addButtonTooltips() {
+			const buttons = document.querySelectorAll('.menu button');
+			const tooltip = document.querySelector('.tooltip');
+			const messages = [
+				'点击我看看会发生什么~',
+				'喵~来点我吧！',
+				'汪！这里有好玩的！',
+				'发现一个秘密按钮！'
+			];
+
+			buttons.forEach((button, index) => {
+				button.addEventListener('mouseenter', () => {
+					tooltip.textContent = messages[index % messages.length];
+					tooltip.style.left = button.offsetLeft + button.offsetWidth / 2 + 'px';
+					tooltip.style.top = button.offsetTop - 40 + 'px';
+					tooltip.style.opacity = '1';
+					tooltip.style.transform = 'translateY(0)';
+				});
+
+				button.addEventListener('mouseleave', () => {
+					tooltip.style.opacity = '0';
+					tooltip.style.transform = 'translateY(10px)';
+				});
+			});
+		}
+
+		// 添加收集爱心游戏逻辑
+		let score = 0;
+		const achievements = [
+			{ score: 10, emoji: '🌟', text: '初心者' },
+			{ score: 50, emoji: '🎀', text: '浪漫达人' },
+			{ score: 100, emoji: '👑', text: '爱之使者' },
+			{ score: 200, emoji: '💝', text: '浪漫王者' }
+		];
+
+		function createCollectibleHeart() {
+			const heart = document.createElement('div');
+			heart.className = 'collectible-heart';
+			heart.innerHTML = ['💖', '💗', '💓', '💕'][Math.floor(Math.random() * 4)];
+			heart.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+			heart.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+
+			heart.addEventListener('click', () => collectHeart(heart));
+			document.body.appendChild(heart);
+
+			setTimeout(() => {
+				if (document.body.contains(heart)) {
+					heart.remove();
+				}
+			}, 5000);
+		}
+
+		function collectHeart(heart) {
+			const effect = document.createElement('div');
+			effect.className = 'collect-effect';
+			effect.innerHTML = '+1';
+			effect.style.left = heart.style.left;
+			effect.style.top = heart.style.top;
+			document.body.appendChild(effect);
+
+			score++;
+			document.getElementById('score').textContent = score;
+			heart.remove();
+
+			// 检查成就
+			checkAchievements();
+
+			setTimeout(() => effect.remove(), 500);
+		}
+
+		function checkAchievements() {
+			achievements.forEach(achievement => {
+				if (score === achievement.score) {
+					showAchievement(achievement);
+				}
+			});
+		}
+
+		function showAchievement(achievement) {
+			const badge = document.createElement('div');
+			badge.className = 'achievement-badge';
+			badge.innerHTML = `
+				<span>${achievement.emoji}</span>
+				<span>解锁成就：${achievement.text}</span>
+			`;
+			document.querySelector('.achievement').appendChild(badge);
+
+			setTimeout(() => badge.classList.add('show'), 100);
+			setTimeout(() => {
+				badge.classList.remove('show');
+				setTimeout(() => badge.remove(), 300);
+			}, 3000);
+		}
+
+		// 定期生成可收集的爱心
+		setInterval(createCollectibleHeart, 2000);
+
+		// 添加按钮连击效果
+		let clickCount = 0;
+		let lastClickTime = 0;
+		const COMBO_TIMEOUT = 1000; // 1秒内的点击算作连击
+
+		document.querySelectorAll('.menu button').forEach(button => {
+			button.addEventListener('click', function(e) {
+				const now = Date.now();
+				if (now - lastClickTime < COMBO_TIMEOUT) {
+					clickCount++;
+					if (clickCount >= 3) {
+						// 触发特殊效果
+						triggerComboEffect(this);
+						clickCount = 0;
+					}
+				} else {
+					clickCount = 1;
+				}
+				lastClickTime = now;
+			});
+		});
+
+		function triggerComboEffect(button) {
+			// 创建烟花效果
+			for (let i = 0; i < 12; i++) {
+				const spark = document.createElement('div');
+				spark.className = 'spark';
+				spark.style.setProperty('--rotation', i * 30 + 'deg');
+				button.appendChild(spark);
+				setTimeout(() => spark.remove(), 1000);
+			}
+
+			// 添加分数奖励
+			score += 10;
+			document.getElementById('score').textContent = score;
+
+			// 显示连击提示
+			const comboText = document.createElement('div');
+			comboText.className = 'combo-text';
+			comboText.textContent = 'COMBO! +10';
+			button.appendChild(comboText);
+			setTimeout(() => comboText.remove(), 1000);
+		}
+
+		// 添加隐藏彩蛋和特殊效果
+		let secretCode = '';
+		let isSpacePressed = false;
+		let secretCats = [];
+		const SPECIAL_CODES = {
+			'meow': '🐱',
+			'woof': '🐶',
+			'love': '💝',
+			'star': '⭐'
+		};
+
+		// 监听键盘输入
+		document.addEventListener('keydown', function(e) {
+			if (e.key === ' ' && !isSpacePressed) {
+				isSpacePressed = true;
+				startSpecialEffect();
+			} else {
+				secretCode += e.key.toLowerCase();
+				checkSecretCode();
+			}
+		});
+
+		document.addEventListener('keyup', function(e) {
+			if (e.key === ' ') {
+				isSpacePressed = false;
+				stopSpecialEffect();
+			}
+		});
+
+		// 检查密码
+		function checkSecretCode() {
+			Object.keys(SPECIAL_CODES).forEach(code => {
+				if (secretCode.includes(code)) {
+					triggerSecretEffect(SPECIAL_CODES[code]);
+					secretCode = '';
+				}
+			});
+
+			if (secretCode.length > 10) {
+				secretCode = '';
+			}
+		}
+
+		// 触发隐藏效果
+		function triggerSecretEffect(emoji) {
+			const cat = document.createElement('div');
+			cat.className = 'secret-cat';
+			cat.innerHTML = emoji;
+			cat.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+			cat.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+			
+			document.body.appendChild(cat);
+			secretCats.push(cat);
+			
+			setTimeout(() => cat.classList.add('show'), 100);
+			
+			cat.addEventListener('click', () => {
+				score += 50;
+				document.getElementById('score').textContent = score;
+				showSpecialText('隐藏彩蛋! +50', cat);
+				cat.remove();
+				secretCats = secretCats.filter(c => c !== cat);
+			});
+		}
+
+		// 音乐互动效果
+		function startSpecialEffect() {
+			document.querySelector('.special-hint').style.opacity = '0';
+			
+			if (bgm.playbackRate !== 1.5) {
+				bgm.playbackRate = 1.5;
+				showSpecialText('音乐加速!', null);
+			}
+			
+			createMusicNotes();
+		}
+
+		function stopSpecialEffect() {
+			if (bgm.playbackRate !== 1) {
+				bgm.playbackRate = 1;
+				showSpecialText('音乐恢复!', null);
+			}
+		}
+
+		// 创建音符效果
+		function createMusicNotes() {
+			if (!isSpacePressed) return;
+			
+			const note = document.createElement('div');
+			note.className = 'music-note';
+			note.innerHTML = ['♪', '♫', '♬', '♩'][Math.floor(Math.random() * 4)];
+			note.style.left = Math.random() * window.innerWidth + 'px';
+			note.style.bottom = '0';
+			note.style.setProperty('--moveX', (Math.random() * 200 - 100) + 'px');
+			
+			document.body.appendChild(note);
+			setTimeout(() => note.remove(), 2000);
+			
+			requestAnimationFrame(() => createMusicNotes());
+		}
+
+		// 显示特殊文字效果
+		function showSpecialText(text, element) {
+			const specialText = document.createElement('div');
+			specialText.className = 'combo-text';
+			specialText.textContent = text;
+			
+			if (element) {
+				specialText.style.left = element.style.left;
+				specialText.style.top = element.style.top;
+			} else {
+				specialText.style.left = '50%';
+				specialText.style.top = '50%';
+			}
+			
+			document.body.appendChild(specialText);
+			setTimeout(() => specialText.remove(), 1000);
+		}
+
+		// 添加隐藏按钮
+		function createSecretButtons() {
+			for (let i = 0; i < 3; i++) {
+				const button = document.createElement('button');
+				button.className = 'secret-button';
+				button.style.left = Math.random() * (window.innerWidth - 30) + 'px';
+				button.style.top = Math.random() * (window.innerHeight - 30) + 'px';
+				
+				button.addEventListener('click', () => {
+					score += 30;
+					document.getElementById('score').textContent = score;
+					showSpecialText('发现隐藏按钮! +30', button);
+					button.remove();
+				});
+				
+				document.body.appendChild(button);
+				setTimeout(() => button.classList.add('show'), 1000);
+			}
+		}
+
+		// 初始化新功能
+		document.addEventListener('DOMContentLoaded', function() {
+			// ... 现有的初始化代码 ...
+			createSecretButtons();
+			
+			// 显示提示
+			setTimeout(() => {
+				document.querySelector('.special-hint').style.opacity = '1';
+				setTimeout(() => {
+					document.querySelector('.special-hint').style.opacity = '0';
+				}, 3000);
+			}, 5000);
+		});
+
+		// 添加按钮悬浮提示
+		const tooltipMessages = {
+			'heart-btn': '点击切换到心形 💝',
+			'starry-btn': '点击切换到星空 ✨',
+			'ribbon-btn': '点击切换到丝带 🎀',
+			'starlight-btn': '点击切换到星光 🌟'
+		};
+
+		document.querySelectorAll('.menu button').forEach(button => {
+			button.addEventListener('mouseenter', function() {
+				const tooltip = document.createElement('div');
+				tooltip.className = 'tooltip';
+				tooltip.textContent = tooltipMessages[this.className] || '点击切换布局';
+				
+				const rect = this.getBoundingClientRect();
+				tooltip.style.left = rect.left + (rect.width / 2) + 'px';
+				tooltip.style.top = rect.top - 30 + 'px';
+				
+				document.body.appendChild(tooltip);
+				setTimeout(() => tooltip.style.opacity = '1', 0);
+			});
+
+			button.addEventListener('mouseleave', function() {
+				const tooltips = document.querySelectorAll('.tooltip');
+				tooltips.forEach(tooltip => {
+					tooltip.style.opacity = '0';
+					setTimeout(() => tooltip.remove(), 300);
+				});
+			});
+		});
+
+		// 添加按钮点击音效
+		function playButtonSound() {
+			const audio = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgCenp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6enp6e//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAJAAAAAAAAAAAAQVuiLBKLwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=');
+			audio.volume = 0.3;
+			audio.play().catch(() => {});
+		}
+
+		document.querySelectorAll('.menu button').forEach(button => {
+			button.addEventListener('click', playButtonSound);
+		});
 	</script>
 
 </body>
