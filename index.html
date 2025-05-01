@@ -168,6 +168,56 @@
 			background: rgba(255, 105, 180, 1);
 			transform: scale(1.05);
 		}
+
+		/* 移动端适配样式 */
+		@media screen and (max-width: 768px) {
+			#love-message {
+				font-size: 24px !important;
+				padding: 0 10px;
+			}
+
+			.show_info {
+				width: 80% !important;
+				max-width: 300px;
+				padding: 15px !important;
+			}
+
+			.show_info img {
+				width: 200px !important;
+				height: 200px !important;
+			}
+
+			.show_info .intro {
+				font-size: 18px !important;
+			}
+
+			.menu {
+				flex-wrap: wrap;
+				gap: 8px !important;
+				padding: 10px !important;
+				bottom: 10px !important;
+			}
+
+			.menu button {
+				padding: 8px 16px !important;
+				font-size: 14px !important;
+			}
+
+			#music-control {
+				top: 10px !important;
+				right: 10px !important;
+			}
+
+			#music-control button {
+				padding: 6px 12px !important;
+				font-size: 12px !important;
+			}
+
+			.element {
+				width: 80px !important;
+				height: 80px !important;
+			}
+		}
 	</style>
 	<link rel="stylesheet" href="css/animate.min.css">
 </head>
@@ -651,6 +701,7 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			initializeFiles();
 			initLayoutButtons();
+			initTouchEvents(); // 初始化触摸事件
 		});
 
 		// 添加页面可见性变化监听
@@ -793,9 +844,9 @@
 						$('.show_info').removeClass(_out[rand_out]);
 						$('.show_info').hide();
 					}, 1000);
-				}, 1500);
+				}, 2500); // 增加展示时间
 			}, 1000);
-		}, 4500);
+		}, 6000); // 增加间隔时间从4500ms到8000ms
 
 		function generateContent() {
 			if (imageList.length === 0) return;
@@ -1023,6 +1074,50 @@
 
 		function render() {
 			renderer.render(scene, camera);
+		}
+
+		// 添加移动端触摸事件支持
+		function initTouchEvents() {
+			let touchStartX = 0;
+			let touchStartY = 0;
+
+			document.addEventListener('touchstart', function(e) {
+				touchStartX = e.touches[0].clientX;
+				touchStartY = e.touches[0].clientY;
+			}, false);
+
+			document.addEventListener('touchmove', function(e) {
+				if (!touchStartX || !touchStartY) {
+					return;
+				}
+
+				let touchEndX = e.touches[0].clientX;
+				let touchEndY = e.touches[0].clientY;
+
+				let xDiff = touchStartX - touchEndX;
+				let yDiff = touchStartY - touchEndY;
+
+				if (Math.abs(xDiff) > Math.abs(yDiff)) {
+					if (xDiff > 0) {
+						// 向左滑动
+						switchLayout('starry');
+					} else {
+						// 向右滑动
+						switchLayout('heart');
+					}
+				} else {
+					if (yDiff > 0) {
+						// 向上滑动
+						switchLayout('ribbon');
+					} else {
+						// 向下滑动
+						switchLayout('starlight');
+					}
+				}
+
+				touchStartX = 0;
+				touchStartY = 0;
+			}, false);
 		}
 	</script>
 
